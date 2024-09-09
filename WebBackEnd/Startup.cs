@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -11,6 +13,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using WebBackEnd.DAL;
+using WebBackEnd.Domains.Posts;
+using Microsoft.EntityFrameworkCore.Design;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace WebBackEnd
 {
@@ -32,6 +38,9 @@ namespace WebBackEnd
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "WebBackEnd", Version = "v1" });
             });
+
+            services.AddScoped<PostsService>();
+            services.AddDbContext<WebBackEndContext>(options =>options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
