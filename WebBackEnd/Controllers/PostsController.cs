@@ -50,9 +50,9 @@ namespace WebBackEnd.Controllers
         /// <param name="post"></param>
         /// <returns></returns>
         [HttpPut]
-        public async Task<Post> UpdatePost(Post post) 
+        public async Task<Post> UpdatePost(Post post)
         {
-           return await _service.UpdatePost(post);
+            return await _service.UpdatePost(post);
         }
 
         /// <summary>
@@ -61,9 +61,37 @@ namespace WebBackEnd.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpDelete]
-        public async Task<bool> DeletePost(Guid id) 
+        public async Task<bool> DeletePost(Guid id)
         {
             return await _service.DeletePost(id);
+        }
+
+        [HttpGet]
+        [Route("GetAllUser")]
+        public async Task<List<User>> GetAllUser()
+        {
+            return await _service.GetAllUsers();
+        }
+
+        [HttpPost]
+        [Route("CreateUser")]
+        public async Task<Guid> CreateUser(User user)
+        {
+            return await _service.CreateUser(user);
+        }
+
+        [HttpPut]
+        [Route("UpdateUser")]
+        public async Task<User> UpdateUser(User user)
+        {
+            return await _service.UpdateUser(user);
+        }
+
+        [HttpDelete]
+        [Route("DeleteUser")]
+        public async Task<bool> DeleteUser(Guid id)
+        {
+            return await _service.DeleteUser(id);
         }
 
     }

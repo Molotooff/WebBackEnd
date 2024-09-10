@@ -10,8 +10,8 @@ using WebBackEnd.DAL;
 namespace WebBackEnd.Migrations
 {
     [DbContext(typeof(WebBackEndContext))]
-    [Migration("20240905171345_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20240910163859_ADD_USER_POSTS")]
+    partial class ADD_USER_POSTS
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -36,6 +36,23 @@ namespace WebBackEnd.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("posts");
+                });
+
+            modelBuilder.Entity("WebBackEnd.Domains.Posts.Models.User", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Password")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("user");
                 });
 #pragma warning restore 612, 618
         }

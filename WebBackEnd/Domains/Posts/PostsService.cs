@@ -93,7 +93,6 @@ namespace WebBackEnd.Domains.Posts
         /// <exception cref="Exception"></exception>
         public async Task<bool> DeletePost(Guid postId) 
         {
-
             var existingPost = await _context.posts
                 .Where(x => x.Id == postId)
                 .FirstOrDefaultAsync() ?? throw new Exception($"Данная публикации не существует");
@@ -106,5 +105,67 @@ namespace WebBackEnd.Domains.Posts
 
         }
 
+        public async Task<List<User>> GetAllUsers()
+        {
+            return _context.user.ToList();
+        }
+
+        public async Task<Guid> CreateUser(User user)
+        {
+            var existingUser = await _context.user
+                .Where(x => x.Id == user.Id)
+                .FirstOrDefaultAsync();
+
+            if (existingUser != null)
+            {
+                throw new Exception($"Данная публикая уже существует");
+            }
+
+            User newUser = new User() 
+            {
+                Id = Guid.NewGuid(),
+                Email = user.Email,
+                Password = user.Password
+            };
+
+            _context.user.Add(newUser);
+
+            _context.SaveChanges();
+
+            return newUser.Id;
+        }
+
+        public async Task<bool> DeleteUser(Guid userId)
+        {
+            var existingUser = await _context.user
+                    .Where(x => x.Id == userId)
+                    .FirstOrDefaultAsync() ?? throw new Exception($"Данная публикации не существует");
+
+            _context.user.Remove(existingUser);
+
+            await _context.SaveChangesAsync();
+
+            return true;
+
+        }
+
+        public async Task<User> UpdateUser(User user) 
+        {
+            var oldUser = await _context.user
+                .Where(x => x.Id == user.Id)
+                .FirstOrDefaultAsync();
+
+            if (oldUser == null)
+            {
+                throw new Exception($"Такой публикаци не существует");
+            }
+
+            oldUser.Email = user.Email;
+            oldUser.Password = user.Password;
+
+            await _context.SaveChangesAsync();
+
+            return oldUser;
+        }
     }
 }
