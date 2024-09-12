@@ -33,10 +33,10 @@ namespace WebBackEnd.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("posts");
+                    b.ToTable("Posts");
                 });
 
-            modelBuilder.Entity("WebBackEnd.Domains.Posts.Models.User", b =>
+            modelBuilder.Entity("WebBackEnd.Domains.User.Models.User", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -53,7 +53,7 @@ namespace WebBackEnd.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("user");
+                    b.ToTable("User");
                 });
 #pragma warning restore 612, 618
         }

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace WebBackEnd.Domains.Posts.Models
+namespace WebBackEnd.Domains.User.Models
 {
     public class User
     {
