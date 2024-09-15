@@ -63,5 +63,41 @@ namespace WebBackEnd.Controllers
         {
             return await _service.DeleteUser(id);
         }
+
+        /// <summary>
+        /// Получение ифнормации о пользователе из VK
+        /// </summary>
+        /// <param name="VKid"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("GetVkUser")]
+        public async Task<User> GetVkUser(long VKid) 
+        {
+            return await _service.GetVKUser(VKid);
+        }
+
+        /// <summary>
+        /// Получение информации о друзьях пользователя из VK
+        /// </summary>
+        /// <param name="VKid"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("GetFriends")]
+        public async Task<List<User>> GetFriends(long VKid) 
+        {
+            return await _service.GetFriends(VKid);
+        }
+
+        /// <summary>
+        /// Получение информации о пользователях в сообществе VK
+        /// </summary>
+        /// <param name="groupId"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("GetUsersFromCommunity")]
+        public async Task<List<User>> GetUsersFromCommunity(string groupId)
+        {
+            return await _service.GetUsersFromCommunity(groupId);
+        }
     }
 }

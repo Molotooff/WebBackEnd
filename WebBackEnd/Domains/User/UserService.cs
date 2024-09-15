@@ -4,7 +4,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using WebBackEnd.DAL;
+using VkNet.Enums.Filters;
+using VkNet.Model;
+using VkNet;
 using UserModel = WebBackEnd.Domains.User.Models.User;
+using WebBackEnd.Domains.User.Models;
 
 
 
@@ -12,11 +16,13 @@ namespace WebBackEnd.Domains.User
 {
     public class UserService
     {
-        private WebBackEndContext _context;
+        private readonly VkApi _api;
+        private readonly WebBackEndContext _context;
 
-        public UserService(WebBackEndContext context)
+        public UserService(WebBackEndContext context, VkApi api)
         {
             _context = context;
+            _api = api;
         }
 
         /// <summary>
@@ -48,8 +54,10 @@ namespace WebBackEnd.Domains.User
             UserModel newUser = new()
             {
                 Id = Guid.NewGuid(),
-                Email = user.Email,
-                Password = user.Password
+                VKID = user.VKID,
+                FirstName = user.FirstName,
+                SecondName = user.SecondName,
+                ScreenName = user.ScreenName,
             };
 
             _context.User.Add(newUser);
@@ -76,8 +84,10 @@ namespace WebBackEnd.Domains.User
                 throw new Exception($"Такой публикаци не существует");
             }
 
-            oldUser.Email = user.Email;
-            oldUser.Password = user.Password;
+            oldUser.VKID = user.VKID;
+            oldUser.FirstName = user.FirstName;
+            oldUser.SecondName = user.SecondName;
+            oldUser.ScreenName = user.ScreenName;
 
             await _context.SaveChangesAsync();
 
@@ -104,5 +114,83 @@ namespace WebBackEnd.Domains.User
 
         }
 
+        /// <summary>
+        /// Получение пользователя VK
+        /// </summary>
+        /// <param name="idVK"></param>
+        /// <returns></returns>
+        public async Task<UserModel> GetVKUser(long idVK) 
+        {
+
+            var userVK = _api.Users.Get(new long[] { idVK }).FirstOrDefault();
+
+            UserModel newUser = new()
+            {
+                Id = Guid.NewGuid(),
+                VKID = userVK.Id,
+                FirstName = userVK.FirstName,
+                SecondName = userVK.LastName,
+                ScreenName = userVK.ScreenName
+            };
+
+            return newUser;
+        }
+
+        /// <summary>
+        /// Получение друзей пользователя
+        /// </summary>
+        /// <param name="idVK"></param>
+        /// <returns></returns>
+        public async Task<List<UserModel>> GetFriends(long idVK) 
+        {
+            var VKfriends = _api.Friends.Get(new FriendsGetParams
+            {
+                UserId = idVK,
+                Fields = ProfileFields.FirstName | ProfileFields.LastName | ProfileFields.ScreenName
+            });
+
+            List<UserModel> friends = new();
+
+            foreach (var friend in VKfriends) 
+            {
+                UserModel newUser = new()
+                {
+                    Id = Guid.NewGuid(),
+                    VKID = friend.Id,
+                    FirstName = friend.FirstName,
+                    SecondName = friend.LastName,
+                    ScreenName = friend.ScreenName
+                };
+                friends.Add(newUser);
+            }
+
+            return friends;
+        }
+
+        public async Task<List<UserModel>> GetUsersFromCommunity(string groupId) 
+        {
+            var usersFromCommunity = _api.Groups.GetMembers(new GroupsGetMembersParams
+            {
+                GroupId = groupId,
+                Fields = UsersFields.All
+            });
+
+            List<UserModel> users = new();
+
+            foreach (var user in usersFromCommunity)
+            {
+                UserModel newUser = new()
+                {
+                    Id = Guid.NewGuid(),
+                    VKID = user.Id,
+                    FirstName = user.FirstName,
+                    SecondName = user.LastName,
+                    ScreenName = user.ScreenName
+                };
+                users.Add(newUser);
+            }
+
+            return users;
+        }
     }
 }

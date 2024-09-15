@@ -11,6 +11,8 @@ using WebBackEnd.Domains.Posts;
 using System.IO;
 using System.Reflection;
 using WebBackEnd.Domains.User;
+using VkNet.Model;
+using VkNet;
 
 namespace WebBackEnd
 {
@@ -40,6 +42,18 @@ namespace WebBackEnd
             services.AddScoped<PostsService>();
             services.AddScoped<UserService>();
             services.AddDbContext<WebBackEndContext>(options =>options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddSingleton<VkApi>(provider =>
+            {
+                var vkApi = new VkApi();
+
+
+                vkApi.Authorize(new ApiAuthParams
+                {
+                    AccessToken = ""
+                });
+
+                return vkApi;
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
