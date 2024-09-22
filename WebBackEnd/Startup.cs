@@ -49,7 +49,7 @@ namespace WebBackEnd
 
                 vkApi.Authorize(new ApiAuthParams
                 {
-                    AccessToken = ""
+                    AccessToken = "vk1.a.YwKD07sSCwRFOmp9YeF18FOOq3L-BXMj8tkVrjtcq-hN6Kf4Q7sdpedvGVW6PcDjsctbQGWarZdiR0US_K8HhpCS20zHLdh8-bLK0UYgb4EpCNNOvTsZH37VeTO0rxu2SIX7EHqmRWJUSAUp8qErJJjl4nqiCjFsjM4m3ylK6OZzTufFEm6j8xd-Gqm3hrPj"
                 });
 
                 return vkApi;

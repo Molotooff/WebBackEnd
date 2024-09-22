@@ -41,6 +41,18 @@ namespace WebBackEnd.Controllers
         }
 
         /// <summary>
+        /// Создание списка пользователей
+        /// </summary>
+        /// <param name="users"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("CreateUsers")]
+        public async Task<List<Guid>> CreateUsers(List<User> users)
+        {
+            return await _service.CreateUsers(users);
+        }
+
+        /// <summary>
         /// Обновление данных пользователя
         /// </summary>
         /// <param name="user"></param>
@@ -98,6 +110,19 @@ namespace WebBackEnd.Controllers
         public async Task<List<User>> GetUsersFromCommunity(string groupId)
         {
             return await _service.GetUsersFromCommunity(groupId);
+        }
+
+        /// <summary>
+        /// Сохранение друзей из ВК в БД
+        /// </summary>
+        /// <param name="VKid"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("SaveUserFriends")]
+        public async Task<List<Guid>> SaveUserFriends(long VKid)
+        {
+            var friends = await _service.GetFriends(VKid);
+            return await _service.CreateUsers(friends);
         }
     }
 }

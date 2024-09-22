@@ -68,6 +68,33 @@ namespace WebBackEnd.Domains.User
         }
 
         /// <summary>
+        /// Создание списка пользователей
+        /// </summary>
+        /// <param name="users"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
+        public async Task <List<Guid>> CreateUsers(List<UserModel> users) 
+        {
+            if (users == null) 
+            {
+                throw new Exception($"Список пользователей пуст");
+            }
+
+            users.ForEach(x => x.Id = Guid.NewGuid());
+
+            List<Guid> usersGuids = new();
+            
+            users.ForEach(x => usersGuids.Add(x.Id));
+
+            _context.Add(users);
+
+            await _context.SaveChangesAsync();
+
+            return usersGuids;
+
+        }
+
+        /// <summary>
         /// Обновление пользователя
         /// </summary>
         /// <param name="user"></param>
